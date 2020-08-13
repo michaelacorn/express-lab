@@ -49,16 +49,22 @@ cart.post('/',(req,res)=>{
 })
 
 cart.put('/:id', (req,res)=>{
-    res.json("Please update.");
-    res.status(200);
+    const id = parseInt(req.params.id);
+    const item = req.body;
+    item.id = id;
+    // Find Index by ID
+    const index = myCart.findIndex(item => item.id === id);
+    // Replace at index
+    myCart.splice(index, 1, item);
+    res.json(item);
 })
 
 cart.delete('/:id', (req, res)=> {
-    const reqId = request.params.id;
-
-    let item = myCart.filter(item =>{
-        return item.id === reqId;
-    });
+    const id = parseInt(req.params.id);
+    const index = myCart.findIndex(item => item.id === id);
+    myCart.splice(index, 1);
+    // Set response code to 204. Send no content.
+    res.sendStatus(204);
     
 });
    
